@@ -1,20 +1,18 @@
-from node:lts as base
-
-run npm install -g pnpm
+from node:lts-alpine as base
 workdir /app
-copy . .
-
-from base as prod-dependencies
-run pnpm install --frozen-lockfile --prod
 
 from base as build
+run corepack enable
+copy package.json pnpm-lock.yaml .
 run pnpm install --frozen-lockfile
+copy next.config.ts tsconfig.json .
+copy src src
 run pnpm build
 
 from base
-copy --from=prod-dependencies /app/node_modules /app/node_modules
-copy --from=build /app/dist /app/dist
-env PORT=80
+copy --from=build /app/.next/standalone .
+env HOSTNAME="0.0.0.0" 
+env PORT=7777
 expose $PORT
-healthcheck cmd curl --fail http://localhost:$PORT || exit 1
-cmd [ "pnpm", "run", "start" ]
+user node
+cmd ["node", "server.js"]

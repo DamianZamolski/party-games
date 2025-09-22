@@ -1,25 +1,30 @@
 {
-  "name": "web",
+  "name": "party-games-web",
   "version": "0.0.0",
   "private": true,
+  "packageManager": "pnpm@10.12.1",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev --turbopack -H 0.0.0.0",
     "build": "next build",
+    "build:image": "docker build --tag $npm_package_name .",
+    "start:image": "docker run $npm_package_name",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@picocss/pico": "^2.0.6",
-    "next": "15.0.2",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@picocss/pico": "^2.1.1",
+    "next": "15.3.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "15.0.2",
-    "typescript": "^5.6.3"
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.29.0",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "eslint": "^9.29.0",
+    "eslint-config-next": "15.3.4",
+    "typescript": "^5.8.3"
   }
 }

@@ -1,18 +1,17 @@
-from node:lts-alpine as base
+from node:lts-alpine as main
+run corepack enable
 workdir /app
 
-from base as build
-run corepack enable
+from main as build
 copy package.json pnpm-lock.yaml .
 run pnpm install --frozen-lockfile
-copy next.config.ts tsconfig.json .
+copy next.config.ts .
 copy src src
 run pnpm build
 
-from base
-copy --from=build /app/.next/standalone .
-env HOSTNAME="0.0.0.0" 
-env PORT=7777
+from main
+copy --from=build /app/dist/standalone .
+env PORT=80
 expose $PORT
 user node
-cmd ["node", "server.js"]
+cmd ["node", "server.js" ]

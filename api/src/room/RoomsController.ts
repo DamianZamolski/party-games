@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
-import { Database } from '../Database.js';
+import { Body, Controller, Get, type Logger, Post } from '@nestjs/common';
+import type { Database } from '../Database.js';
 import type { Room } from './Room.js';
 import type { Rooms } from './Rooms.js';
 

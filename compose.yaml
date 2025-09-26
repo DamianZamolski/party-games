@@ -6,7 +6,7 @@ services:
     ports:
       - '$WEB_PORT:7777'
     environment:
-      - API_URL=http://api
+      - NEXT_PUBLIC_API_URL=http://api
     restart: unless-stopped
 
   api:

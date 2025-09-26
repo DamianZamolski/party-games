@@ -1,6 +1,6 @@
 import type { TransportSingleOptions } from 'pino';
-import { lokiUrl } from './lokiUrl.js';
 import { developmentLoggerConfig } from './developmentLoggerConfig.js';
+import { lokiUrl } from './lokiUrl.js';
 
 export const productionLoggerConfig: TransportSingleOptions = lokiUrl
   ? {

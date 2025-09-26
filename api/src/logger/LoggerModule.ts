@@ -1,6 +1,6 @@
 import { LoggerModule as PinoLoggerModule } from 'nestjs-pino';
-import { loggerConfig } from './loggerConfig.js';
 import { isProduction } from '../utils/isProduction.js';
+import { loggerConfig } from './loggerConfig.js';
 
 export const LoggerModule = PinoLoggerModule.forRoot({
   pinoHttp: {

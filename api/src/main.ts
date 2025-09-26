@@ -1,8 +1,8 @@
 import 'source-map-support/register.js';
-import { Logger } from 'nestjs-pino';
 import { NestFactory } from '@nestjs/core';
-import { MainModule } from './MainModule.js';
+import { Logger } from 'nestjs-pino';
 import { initSwagger } from './initSwagger.js';
+import { MainModule } from './MainModule.js';
 
 async function main() {
   const app = await NestFactory.create(MainModule, { bufferLogs: true });

@@ -35,7 +35,7 @@ jobs:
       - name: build and push image
         uses: docker/build-push-action@v5
         with:
-          context: ./web
+          context: web
           tags: ${{ secrets.DOCKERHUB_USER }}/party-games-web:latest
           push: true
 
@@ -52,6 +52,6 @@ jobs:
       - name: build and push image
         uses: docker/build-push-action@v5
         with:
-          context: ./api
+          context: api
           tags: ${{ secrets.DOCKERHUB_USER }}/party-games-api:latest
           push: true

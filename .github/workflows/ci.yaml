@@ -22,7 +22,7 @@ jobs:
           name: test-report
           path: volumes/test
   
-  api:
+  web:
     needs: test
     runs-on: ubuntu-latest
     steps:

@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
@@ -36,39 +36,25 @@ jobs:
           name: test-report
           path: volumes/test
 
-  web:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
       - name: login to dockerhub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: build and push image
+      - name: build and push web
         uses: docker/build-push-action@v5
         with:
-          context: '{{defaultContext}}:web'
+          context: web
           tags: ${{ secrets.DOCKERHUB_USER }}/party-games-web:latest
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  api:
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: login to dockerhub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-      - name: build and push image
+      - name: build and push api
         uses: docker/build-push-action@v5
         with:
-          context: '{{defaultContext}}:api'
+          context: api
           tags: ${{ secrets.DOCKERHUB_USER }}/party-games-api:latest
           push: true
           cache-from: type=gha

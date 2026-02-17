@@ -1,0 +1,19 @@
+services:
+  web:
+    build:
+      args:
+        NEXT_PUBLIC_API_URL: http://api:$API_PORT
+
+  test:
+    container_name: test
+    build:
+      context: ./test
+    environment:
+      - WEB_URL=http://web:$WEB_PORT
+    depends_on:
+      web:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    volumes:
+      - ./volumes/test:/app/html-report

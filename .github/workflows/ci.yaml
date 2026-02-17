@@ -15,7 +15,7 @@ jobs:
       - name: set up docker buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: docker bake
+      - name: build images
         uses: docker/bake-action@v6
         with:
           files: |
@@ -42,20 +42,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-      - name: build and push web
-        uses: docker/build-push-action@v5
+      - name: push images
+        uses: docker/bake-action@v6
         with:
-          context: web
-          tags: ${{ secrets.DOCKERHUB_USER }}/party-games-web:latest
+          files: |
+            compose.yaml
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: build and push api
-        uses: docker/build-push-action@v5
-        with:
-          context: api
-          tags: ${{ secrets.DOCKERHUB_USER }}/party-games-api:latest
-          push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          set: |
+            *.cache-from=type=gha
+            *.cache-to=type=gha,mode=max

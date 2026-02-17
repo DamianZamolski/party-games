@@ -1,18 +1,10 @@
-import { expect, test } from '@playwright/test';
-import { fail } from 'assert';
+import { expect, test as base } from '@playwright/test';
+import { getWebUrl } from './getWebUrl.js';
 
-export function getWebUrl() {
-  const webUrl = process.env.WEB_URL;
+const options = { webUrl: getWebUrl() } as const;
+const test = base.extend<typeof options>(options);
 
-  if (!webUrl) {
-    fail('WEB_URL missing');
-  }
-
-  return webUrl;
-}
-
-test('admin can start a match', async ({ page, browserName }) => {
-  const webUrl = getWebUrl();
+test('admin can start a match', async ({ page, browserName, webUrl }) => {
   await page.goto(webUrl);
   const someRoomName = `${browserName}_some-room-name`;
   await page.getByRole('textbox', { name: /room name/i }).fill(someRoomName);
@@ -21,8 +13,11 @@ test('admin can start a match', async ({ page, browserName }) => {
   await page.getByRole('button', { name: /start match/i }).click();
 });
 
-test('not admin can not start a match', async ({ page, browserName }) => {
-  const webUrl = getWebUrl();
+test('not admin can not start a match', async ({
+  page,
+  browserName,
+  webUrl,
+}) => {
   const someRoomName = `${browserName}_some-room-name`;
   await page.goto(`${webUrl}/rooms/${someRoomName}`);
 

@@ -4,18 +4,19 @@ services:
     build:
       context: ./web
       args:
-        NEXT_PUBLIC_API_URL: http://localhost:$API_PORT
+        NEXT_PUBLIC_API_URL: http://localhost:${API_PORT}
         NODE_ENV: production
+    image: damianzamolski/party-games-web:latest
     environment:
-      - PORT=$WEB_PORT
+      - PORT=${WEB_PORT}
     ports:
-      - "$WEB_PORT:$WEB_PORT"
+      - '${WEB_PORT}:${WEB_PORT}'
     restart: unless-stopped
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "wget --no-verbose --tries=1 --spider http://0.0.0.0:$WEB_PORT || exit 1",
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://0.0.0.0:${WEB_PORT} || exit 1',
         ]
       interval: 30s
       timeout: 10s
@@ -26,18 +27,19 @@ services:
     container_name: api
     build:
       context: ./api
+    image: damianzamolski/party-games-api:latest
     environment:
-      - DATABASE_URL=postgresql://$DATABASE_USER:$DATABASE_PASSWORD@postgres/$DATABASE_NAME
+      - DATABASE_URL=postgresql://${DATABASE_USER}:${DATABASE_PASSWORD}@postgres/${DATABASE_NAME}
       - NODE_ENV=production
-      - PORT=$API_PORT
+      - PORT=${API_PORT}
     ports:
-      - "$API_PORT:$API_PORT"
+      - '${API_PORT}:${API_PORT}'
     restart: unless-stopped
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "wget --no-verbose --tries=1 --spider http://localhost:$API_PORT/health || exit 1",
+          'CMD-SHELL',
+          'wget --no-verbose --tries=1 --spider http://localhost:${API_PORT}/health || exit 1',
         ]
       interval: 30s
       timeout: 10s
@@ -48,15 +50,16 @@ services:
         condition: service_healthy
 
   postgres:
-    container_name: postgres
     image: postgres
+    container_name: postgres
     environment:
-      - POSTGRES_DB=$DATABASE_NAME
-      - POSTGRES_USER=$DATABASE_USER
-      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     ports:
-      - "$DATABASE_PORT:5432"
-    restart: unless-stopped
+      - '${DATABASE_PORT}:5432'
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql
     command:
       - postgres
       - -c
@@ -65,29 +68,28 @@ services:
       - log_duration=on
       - -c
       - logging_collector=off
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "$DATABASE_NAME"]
+      test: ['CMD-SHELL', 'pg_isready', '-d', '${DATABASE_NAME}']
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 5s
-    volumes:
-      - ./volumes/postgres:/var/lib/postgresql
 
   loki:
     profiles:
       - prod
-    container_name: loki
     image: grafana/loki:latest
+    container_name: loki
     restart: unless-stopped
 
   grafana:
     profiles:
       - prod
-    container_name: grafana
     image: grafana/grafana:latest
+    container_name: grafana
     ports:
-      - "$GRAFANA_PORT:3000"
+      - '${GRAFANA_PORT}:3000'
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:

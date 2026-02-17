@@ -12,7 +12,7 @@
     "lib": ["dom", "dom.iterable", "es2024"],
     "module": "preserve",
     "moduleDetection": "force",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
     "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
@@ -27,7 +27,7 @@
     "strictBindCallApply": true,
     "strictNullChecks": true,
     "target": "es2024",
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": true
   },
   "include": [
     "next-env.d.ts",

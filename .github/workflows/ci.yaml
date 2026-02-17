@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  ci:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: checkout code
@@ -20,4 +20,38 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: test-volume
+          path: volumes/test
+  
+  api:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./web
+          tags: ${{ secrets.DOCKERHUB_USER }}/party-games-web:latest
+          push: true
+
+  api:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: login to dockerhub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./api
+          tags: ${{ secrets.DOCKERHUB_USER }}/party-games-api:latest
+          push: true
